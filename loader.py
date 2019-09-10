@@ -159,4 +159,4 @@ def yeast(path):
 
 
 if __name__ == '__main__':
-    nus_pre()
+    nus_pre('dataset')
