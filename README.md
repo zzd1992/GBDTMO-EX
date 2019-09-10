@@ -40,7 +40,7 @@ Get the performance of non-sparse `gbdtmo` for a specific dataset via
 ```
 python run_peformance.py dataset gbdtmo
 ```
-Get the running time of non-sparse `gbdtmo` and `gbdtso` for each rounds via
+Get the running time of non-sparse `gbdtmo` and `gbdtso` for each round via
 ```
 python run_time.py dataset
 ```
