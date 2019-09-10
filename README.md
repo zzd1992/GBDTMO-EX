@@ -32,3 +32,21 @@ Dump to text file or load from text file:
 booster.dump(path)
 booster.load(path)
 ```
+
+## Reproduction the experiments
+Get the performance of non-sparse `gbdtmo` for a specific dataset via
+```
+python run_peformance.py dataset gbdtmo
+```
+Get the running time of non-sparse `gbdtmo` and `gbdtso` for each rounds via
+```
+python run_time.py dataset
+```
+Get the performance of sparse `gbdtmo` for a specific dataset via
+```
+python run_sparse.py dataset -time 0
+```
+Get the running time of sparse `gbdtmo` for each rounds via
+```
+python run_sparse.py dataset -time 1
+```
