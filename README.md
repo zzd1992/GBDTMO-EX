@@ -52,6 +52,6 @@ Get the running time of sparse `gbdtmo` for each rounds via
 ```
 python run_sparse.py dataset -time 1
 ```
-Results will be recorded in `log/`. Please refer `test.py` to see how to parse them.
+See help of those scripts for more details. Results will be recorded in `log/`. Please refer `test.py` to see how to parse them.
 
 We provide datasets `mnist`, `mnist_reg`, `yeast` and `Caltech101`. For `nus-wide`, you should download it into `dataset/` from [here](http://sourceforge.net/projects/mulan/files/datasets/nuswide-cVLADplus.rar) and run `loader.py` to pre-process it.
