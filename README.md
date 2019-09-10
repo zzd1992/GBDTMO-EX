@@ -15,19 +15,18 @@ import cfg
 
 LIB = load_lib(cfg.Lib_path)
 ```
-Build a `gbdtmo` instance, you must setup the output dimension.
+Build a `gbdtmo` instance. You must setup the output dimension.
 ```python
 out_dim = 10
 params = {"max_depth": 5, "lr": 0.1}
 booster = GBDTMulti(LIB, out_dim=out_dim, params=params)
 ```
-Setup your dataset, train and predict.
+Setup your dataset, train and predict. Data in the first tuple is used for training. Data in the second tuple is used for validation which can be omitted. Items in tuples must be an numpy array.
 ```python
 booster.set_data((x_train, y_train), (x_valid, y_valid))
 booster.train(num_rounds)
 preds = booster.predict(x_valid)
 ```
-Data in the first tuple is used for training. Data in the second tuple is used for validation which can be omitted. Items in tuples must be an numpy array.
 Dump to text file or load from text file:
 ```python
 booster.dump(path)
