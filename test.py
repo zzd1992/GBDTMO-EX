@@ -99,8 +99,7 @@ def test_topk(file):
                 s.append(float(line[2]))
             if "time" in line:
                 line = line.split(" ")
-                num = 10
-                t.append(float(line[-1])/num)
+                t.append(float(line[-1]))
 
     t, s = np.array(t), np.array(s)
     t = np.reshape(t, (len(t)//2, 2))

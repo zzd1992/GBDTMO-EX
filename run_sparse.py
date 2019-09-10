@@ -34,7 +34,10 @@ def regression(data, meta, depth, lr, k, one_side):
     t = time.time()
     m.train(ROUND)
     t = time.time() - t
-    print("Total time: {:.3f}".format(t))
+    if args.time == 1:
+        print("Average time: {:.3f}".format(t/ROUND))
+    else:
+        print("Total time: {:.3f}".format(t))
     del m
 
 
@@ -52,7 +55,10 @@ def classification(data, meta, depth, lr, k, one_side):
     t = time.time()
     m.train(ROUND)
     t = time.time() - t
-    print("Total time: {:.3f}".format(t))
+    if args.time == 1:
+        print("Average time: {:.3f}".format(t/ROUND))
+    else:
+        print("Total time: {:.3f}".format(t))
     del m
 
 
