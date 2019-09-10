@@ -1,4 +1,5 @@
-Lib_path = "/home/zhangzhendong_15/Release/GBDTMO/build/gbdtmo.so"
+# please modify it
+Lib_path = "../GBDTMO/build/gbdtmo.so"
 
 Depth = {"lightgbm": {"mnist": 6, "yeast": 4, "Caltech101": 8, "nus-wide": 8, "mnist_reg": 8},
          "gbdtso": {"mnist": 6, "yeast": 5, "Caltech101": 8, "nus-wide": 8, "mnist_reg": 8},
