@@ -8,4 +8,11 @@ First, find the path of `gbdtmo.so` and modify `Lib_path` in `cfg.py`.
 ```python
 Lib_path = "path to gbdtmo.so"
 ```
+Then import `gbdtmo` and load the shared library file
+```python
+from gbdtmo import load_lib, GBDTSingle, GBDTMulti
+import cfg
+
+LIB = load_lib(cfg.Lib_path)
+```
 
