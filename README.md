@@ -1,7 +1,7 @@
 # GBDTMO-EX
 This project has two purposes:
 - provides examples for how to use [GBDT-MO](https://github.com/zzd1992/GBDTMO)
-- provides codes for reproduction the experiments in our preprint paper.
+- provides codes for reproduction the experiments in our [preprint paper](https://arxiv.org/abs/1909.04373).
 
 ## How to use GBDT-MO
 Suppose you have installed `gbdtmo`. If not, please refer [GBDT-MO](https://github.com/zzd1992/GBDTMO).
