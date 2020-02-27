@@ -70,16 +70,18 @@ def regression_single(data, meta, depth, lr):
          'min_samples': 4}
 
     x_train, y_train, x_test, y_test = data
+    m = GBDTSingle(LIB, out_dim=1, params=p)
+    m.set_data((x_train, None))
 
     t = 0
     for i in range(meta['out']):
-        m = GBDTSingle(LIB, out_dim=1, params=p)
         yy_train = np.ascontiguousarray(y_train[:, i])
-        m.set_data((x_train, yy_train))
+        m._set_label(yy_train, True)
         _t = time.time()
         m.train(ROUND)
         t += time.time() - _t
-        del m
+        m.reset()
+    del m
     return t
 
 

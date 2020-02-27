@@ -41,23 +41,25 @@ def train_lightgbm(data, meta):
 
     x_train, y_train, x_test, y_test = data
     preds = np.zeros_like(y_test)
-
+    lgb_train = lgb.Dataset(x_train)
+    lgb_train.construct()
+    lgb_eval = lgb.Dataset(x_test)
+    
     for i in range(meta['out']):
         yy_train = np.ascontiguousarray(y_train[:, i])
-        yy_test = np.ascontiguousarray(y_test[:, i])
-        lgb_train = lgb.Dataset(x_train, yy_train)
-        lgb_eval = lgb.Dataset(x_test, yy_test, reference=lgb_train)
+        yy_test = np.ascontiguousarray(y_test[:, i])        
+        lgb_train.set_label(yy_train)
+        lgb_eval.set_label(yy_test)
         m = lgb.train(p, lgb_train, num_boost_round=ROUND, valid_sets=lgb_eval,
                       early_stopping_rounds=25)
         _ = m.predict(x_test, num_iteration=m.best_iteration)
         preds[:, i] = _
         del m
-
+    
     rmse = np.mean((preds - y_test) ** 2)
     rmse = np.sqrt(rmse)
     print("Best score: {:.5f}".format(rmse))
-
-
+    
 def train_gbdt_multi(data, meta):
     depth = cfg.Depth[args.mode][args.data]
     lr = cfg.Learning_rate[args.mode][args.data]
@@ -90,23 +92,23 @@ def train_gbdt_single(data, meta):
          'min_samples': 4, 'hist_cache': 48}
 
     x_train, y_train, x_test, y_test = data
+    m = GBDTSingle(LIB, out_dim=1, params=p)
     preds = np.zeros_like(y_test)
-
+    m.set_data((x_train, None), (x_test, None))
+    
     for i in range(meta['out']):
-        m = GBDTSingle(LIB, out_dim=1, params=p)
         yy_train = np.ascontiguousarray(y_train[:, i])
         yy_test = np.ascontiguousarray(y_test[:, i])
-        m.set_data((x_train, yy_train), (x_test, yy_test))
-
+        m._set_label(yy_train, True)
+        m._set_label(yy_test, False)
         m.train(ROUND)
         _ = m.predict(x_test)
         preds[:, i] = _
-        del m
+        m.reset()
 
     rmse = np.mean((preds - y_test) ** 2)
     rmse = np.sqrt(rmse)
     print("Best score: {:.5f}".format(rmse))
-
 
 if __name__ == '__main__':
     m = DataLoader()
