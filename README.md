@@ -1,9 +1,9 @@
 # GBDTMO-EX
 This project has two purposes:
-- provides examples for how to use [GBDT-MO](https://github.com/zzd1992/GBDTMO)
-- provides codes for reproduction the experiments in our [preprint paper](https://arxiv.org/abs/1909.04373).
+- provides real examples to use [GBDT-MO](https://github.com/zzd1992/GBDTMO)
+- provides codes for reproduction the experiments in our [paper](https://arxiv.org/abs/1909.04373).
 
-## How to use GBDT-MO
+## How to use
 Suppose you have installed `gbdtmo`. If not, please refer [GBDT-MO](https://github.com/zzd1992/GBDTMO).
 
 Find the path of `gbdtmo.so` and modify `Lib_path` in `cfg.py`.
@@ -29,11 +29,7 @@ booster.set_data((x_train, y_train), (x_valid, y_valid))
 booster.train(num_rounds)
 preds = booster.predict(x_valid)
 ```
-Dump to text file or load from text file:
-```python
-booster.dump(path)
-booster.load(path)
-```
+For more information, refer the Python scripts or our [documentation](https://gbdtmo.readthedocs.io).
 
 ## Reproduction the experiments
 Get the performance of non-sparse `gbdtmo` for a specific dataset via
