@@ -102,11 +102,11 @@ def test_topk(file):
                 t.append(float(line[-1]))
 
     t, s = np.array(t), np.array(s)
-    t = np.reshape(t, (len(t)//2, 2))
-    s = np.reshape(s, (len(s)//2, 2))
+    t = np.reshape(t, (len(t) // 2, 2))
+    s = np.reshape(s, (len(s) // 2, 2))
 
     return t, s
-                     
+
 
 if __name__ == '__main__':
     test_cls('mnist')

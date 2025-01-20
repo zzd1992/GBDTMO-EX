@@ -14,7 +14,7 @@ def normalize(x_train, x_test):
 # synthetic
 def friedman1(N):
     def func(x):
-        return np.sin(np.pi*x[:, 0]*x[:, 1]) + 2 * (x[:, 2] - 0.5)**2 + x[:, 3] + 0.5 * x[:, 4]
+        return np.sin(np.pi * x[:, 0] * x[:, 1]) + 2 * (x[:, 2] - 0.5) ** 2 + x[:, 3] + 0.5 * x[:, 4]
 
     x_train = 2 * np.random.rand(N, 10) - 1.0
     y_train = func(x_train)
@@ -46,7 +46,7 @@ def mnist_cls(path):
     x_train, y_train = data['x_train'].astype("float64"), data['y_train'].astype("int32")
     x_test, y_test = data['x_test'].astype("float64"), data['y_test'].astype("int32")
     del data
-    
+
     return x_train, y_train, x_test, y_test
 
 
@@ -61,7 +61,7 @@ def mnist_reg(path):
     x_train, y_train = x_train[:, :10], x_train[:, 10:]
     y_train = y_train[:, :4, 7:13]
     x_train, y_train = np.reshape(x_train, (len(x_train), -1)), np.reshape(y_train, (len(y_train), -1))
-    
+
     x_test = np.reshape(x_test, (len(x_test), 28, 28))
     x_test = x_test[:, 4:-4, 4:-4]
     x_test, y_test = x_test[:, :10], x_test[:, 10:]
@@ -131,9 +131,7 @@ def nus(path):
 
 
 def yeast(path):
-    d = {"CYT": 0, "NUC": 1, "MIT": 2, "ME3": 3,
-         "ME2": 4, "ME1": 5, "EXC": 6, "VAC": 7,
-         "POX": 8, "ERL": 9}
+    d = {"CYT": 0, "NUC": 1, "MIT": 2, "ME3": 3, "ME2": 4, "ME1": 5, "EXC": 6, "VAC": 7, "POX": 8, "ERL": 9}
 
     N = 1484
     with open(path, 'r') as f:

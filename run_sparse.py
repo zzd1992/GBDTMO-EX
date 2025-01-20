@@ -1,12 +1,12 @@
 from gbdtmo import load_lib, GBDTMulti
 import time, argparse
+import os
 import numpy as np
 import cfg
 from dataset import DataLoader
 
 parser = argparse.ArgumentParser()
-parser.add_argument("data", help="which dataset to use",
-                    choices=['mnist', 'mnist_reg', 'Caltech101', 'nus-wide'])
+parser.add_argument("data", help="which dataset to use", choices=['mnist', 'mnist_reg', 'Caltech101', 'nus-wide'])
 parser.add_argument("-time", help="whether to test running time", default=0, type=int)
 parser.add_argument("-seed", default=0, type=int)
 args = parser.parse_args()
@@ -22,10 +22,22 @@ else:
 def regression(data, meta, depth, lr, k, one_side):
     print("depth: {}, lr: {}, k: {}, one_side: {}".format(depth, lr, k, one_side))
 
-    p = {'max_depth': depth, 'max_leaves': int(0.75 * 2 ** depth), 'topk': k, 'loss': b"mse",
-         'gamma': 1e-6, 'num_threads': 8, 'max_bins': meta['bin'], 'lr': lr, 'reg_l2': 1.0,
-         'early_stop': 25, 'one_side': one_side, 'verbose': False, 'hist_cache': 48,
-         'min_samples': 4}
+    p = {
+        'max_depth': depth,
+        'max_leaves': int(0.75 * 2**depth),
+        'topk': k,
+        'loss': b"mse",
+        'gamma': 1e-6,
+        'num_threads': 8,
+        'max_bins': meta['bin'],
+        'lr': lr,
+        'reg_l2': 1.0,
+        'early_stop': 25,
+        'one_side': one_side,
+        'verbose': False,
+        'hist_cache': 48,
+        'min_samples': 4,
+    }
 
     m = GBDTMulti(LIB, out_dim=meta['out'], params=p)
     x_train, y_train, x_test, y_test = data
@@ -35,7 +47,7 @@ def regression(data, meta, depth, lr, k, one_side):
     m.train(ROUND)
     t = time.time() - t
     if args.time == 1:
-        print("Average time: {:.3f}".format(t/ROUND))
+        print("Average time: {:.3f}".format(t / ROUND))
     else:
         print("Total time: {:.3f}".format(t))
     del m
@@ -44,10 +56,21 @@ def regression(data, meta, depth, lr, k, one_side):
 def classification(data, meta, depth, lr, k, one_side):
     print("depth: {}, lr: {}, k: {}, one_side: {}".format(depth, lr, k, one_side))
 
-    p = {'max_depth': depth, 'max_leaves': int(0.75 * 2 ** depth), 'topk': k, 'loss': b"ce",
-         'gamma': 1e-3, 'num_threads': 8, 'max_bins': meta['bin'], 'lr': lr, 'reg_l2': 1.0,
-         'early_stop': 25, 'one_side': one_side, 'verbose': False,
-         'min_samples': 16}
+    p = {
+        'max_depth': depth,
+        'max_leaves': int(0.75 * 2**depth),
+        'topk': k,
+        'loss': b"ce",
+        'gamma': 1e-3,
+        'num_threads': 8,
+        'max_bins': meta['bin'],
+        'lr': lr,
+        'reg_l2': 1.0,
+        'early_stop': 25,
+        'one_side': one_side,
+        'verbose': False,
+        'min_samples': 16,
+    }
 
     m = GBDTMulti(LIB, out_dim=meta['out'], params=p)
     x_train, y_train, x_test, y_test = data
@@ -56,7 +79,7 @@ def classification(data, meta, depth, lr, k, one_side):
     m.train(ROUND)
     t = time.time() - t
     if args.time == 1:
-        print("Average time: {:.3f}".format(t/ROUND))
+        print("Average time: {:.3f}".format(t / ROUND))
     else:
         print("Total time: {:.3f}".format(t))
     del m
@@ -86,4 +109,3 @@ if __name__ == '__main__':
             classification(data, meta, 8, 0.1, k, False)
     else:
         raise ValueError("Unknown dataset!")
-    

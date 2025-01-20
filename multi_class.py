@@ -1,9 +1,13 @@
 from gbdtmo import load_lib, GBDTSingle, GBDTMulti
 import time, os, argparse
 import numpy as np
-import lightgbm as lgb
 import cfg
 from dataset import DataLoader
+
+try:
+    import lightgbm as lgb
+except:
+    Warning("LightGBM is not installed!")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("data")
@@ -20,7 +24,10 @@ GAMMA = 1e-3
 min_samples = 4 if args.data == 'yeast' else 16
 num_threads = 4 if args.data in ['mnist', 'yeast'] else 8
 
-if not os.path.isdir("log"): os.mkdir("log")
+if not os.path.isdir("log"):
+    os.mkdir("log")
+if not os.path.isdir("result"):
+    os.mkdir("result")
 
 
 def train_lightgbm(data, meta):
@@ -32,7 +39,7 @@ def train_lightgbm(data, meta):
         'objective': 'softmax',
         'metric': 'multi_error',
         'num_class': meta['out'],
-        'num_leaves': int(0.75 * 2 ** depth),
+        'num_leaves': int(0.75 * 2**depth),
         'learning_rate': lr,
         'num_threads': num_threads,
         'max_depth': depth,
@@ -46,8 +53,7 @@ def train_lightgbm(data, meta):
     x_train, y_train, x_test, y_test = data
     lgb_train = lgb.Dataset(x_train, y_train)
     lgb_eval = lgb.Dataset(x_test, y_test, reference=lgb_train)
-    m = lgb.train(p, lgb_train, num_boost_round=1000, valid_sets=lgb_eval,
-                  early_stopping_rounds=25)
+    m = lgb.train(p, lgb_train, num_boost_round=1000, valid_sets=lgb_eval, early_stopping_rounds=25)
 
     preds = m.predict(x_test, num_iteration=m.best_iteration)
     preds = np.argmax(preds, -1)
@@ -62,10 +68,21 @@ def train_gbdt_multi(data, meta):
     depth = cfg.Depth[args.mode][args.data]
     lr = cfg.Learning_rate[args.mode][args.data]
 
-    p = {'max_depth': depth, 'max_leaves': int(0.75 * 2 ** depth), 'topk': args.k, 'loss': b"ce",
-         'gamma': GAMMA, 'num_threads': num_threads, 'max_bins': meta['bin'], 'lr': lr, 'reg_l2': 1.0,
-         'early_stop': 25, 'one_side': True, 'verbose': True,
-         'min_samples': min_samples}
+    p = {
+        'max_depth': depth,
+        'max_leaves': int(0.75 * 2**depth),
+        'topk': args.k,
+        'loss': b"ce",
+        'gamma': GAMMA,
+        'num_threads': num_threads,
+        'max_bins': meta['bin'],
+        'lr': lr,
+        'reg_l2': 1.0,
+        'early_stop': 25,
+        'one_side': True,
+        'verbose': True,
+        'min_samples': min_samples,
+    }
 
     m = GBDTMulti(LIB, out_dim=meta['out'], params=p)
     x_train, y_train, x_test, y_test = data
@@ -77,10 +94,21 @@ def train_gbdt_single(data, meta):
     depth = cfg.Depth[args.mode][args.data]
     lr = cfg.Learning_rate[args.mode][args.data]
 
-    p = {'max_depth': depth, 'max_leaves': int(0.75 * 2 ** depth), 'topk': 0, 'loss': b"ce_column",
-         'gamma': GAMMA, 'num_threads': num_threads, 'max_bins': meta['bin'], 'lr': lr, 'reg_l2': 1.0,
-         'early_stop': 25, 'one_side': True, 'verbose': True,
-         'min_samples': min_samples}
+    p = {
+        'max_depth': depth,
+        'max_leaves': int(0.75 * 2**depth),
+        'topk': 0,
+        'loss': b"ce_column",
+        'gamma': GAMMA,
+        'num_threads': num_threads,
+        'max_bins': meta['bin'],
+        'lr': lr,
+        'reg_l2': 1.0,
+        'early_stop': 25,
+        'one_side': True,
+        'verbose': True,
+        'min_samples': min_samples,
+    }
 
     x_train, y_train, x_test, y_test = data
 

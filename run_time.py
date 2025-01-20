@@ -5,8 +5,7 @@ import cfg
 from dataset import DataLoader
 
 parser = argparse.ArgumentParser()
-parser.add_argument("data", help="which dataset to use",
-                    choices=['mnist', 'mnist_reg', 'Caltech101', 'nus-wide'])
+parser.add_argument("data", help="which dataset to use", choices=['mnist', 'mnist_reg', 'Caltech101', 'nus-wide'])
 parser.add_argument("-workers", default=8, type=int)
 args = parser.parse_args()
 
@@ -15,10 +14,21 @@ ROUND = 10
 
 
 def classification_multi(data, meta, depth, lr):
-    p = {'max_depth': depth, 'max_leaves': int(0.75 * 2 ** depth), 'topk': 0, 'loss': b"ce",
-         'gamma': 1e-3, 'num_threads': args.workers, 'max_bins': meta['bin'], 'lr': lr, 'reg_l2': 1.0,
-         'early_stop': 0, 'one_side': True, 'verbose': False,
-         'min_samples': 16}
+    p = {
+        'max_depth': depth,
+        'max_leaves': int(0.75 * 2**depth),
+        'topk': 0,
+        'loss': b"ce",
+        'gamma': 1e-3,
+        'num_threads': args.workers,
+        'max_bins': meta['bin'],
+        'lr': lr,
+        'reg_l2': 1.0,
+        'early_stop': 0,
+        'one_side': True,
+        'verbose': False,
+        'min_samples': 16,
+    }
 
     m = GBDTMulti(LIB, out_dim=meta['out'], params=p)
     x_train, y_train, x_test, y_test = data
@@ -31,10 +41,21 @@ def classification_multi(data, meta, depth, lr):
 
 
 def classification_single(data, meta, depth, lr):
-    p = {'max_depth': depth, 'max_leaves': int(0.75 * 2 ** depth), 'topk': 0, 'loss': b"ce_column",
-         'gamma': 1e-3, 'num_threads': args.workers, 'max_bins': meta['bin'], 'lr': lr, 'reg_l2': 1.0,
-         'early_stop': 0, 'one_side': True, 'verbose': False,
-         'min_samples': 16}
+    p = {
+        'max_depth': depth,
+        'max_leaves': int(0.75 * 2**depth),
+        'topk': 0,
+        'loss': b"ce_column",
+        'gamma': 1e-3,
+        'num_threads': args.workers,
+        'max_bins': meta['bin'],
+        'lr': lr,
+        'reg_l2': 1.0,
+        'early_stop': 0,
+        'one_side': True,
+        'verbose': False,
+        'min_samples': 16,
+    }
 
     x_train, y_train, x_test, y_test = data
 
@@ -48,10 +69,22 @@ def classification_single(data, meta, depth, lr):
 
 
 def regression_multi(data, meta, depth, lr):
-    p = {'max_depth': depth, 'max_leaves': int(0.75 * 2 ** depth), 'topk': 0, 'loss': b"mse",
-         'gamma': 1e-6, 'num_threads': args.workers, 'max_bins': meta['bin'], 'lr': lr, 'reg_l2': 1.0,
-         'early_stop': 0, 'one_side': True, 'verbose': False, 'hist_cache': 48,
-         'min_samples': 4}
+    p = {
+        'max_depth': depth,
+        'max_leaves': int(0.75 * 2**depth),
+        'topk': 0,
+        'loss': b"mse",
+        'gamma': 1e-6,
+        'num_threads': args.workers,
+        'max_bins': meta['bin'],
+        'lr': lr,
+        'reg_l2': 1.0,
+        'early_stop': 0,
+        'one_side': True,
+        'verbose': False,
+        'hist_cache': 48,
+        'min_samples': 4,
+    }
 
     m = GBDTMulti(LIB, out_dim=meta['out'], params=p)
     x_train, y_train, x_test, y_test = data
@@ -64,10 +97,22 @@ def regression_multi(data, meta, depth, lr):
 
 
 def regression_single(data, meta, depth, lr):
-    p = {'max_depth': depth, 'max_leaves': int(0.75 * 2 ** depth), 'topk': 0, 'loss': b"mse",
-         'gamma': 1e-6, 'num_threads': args.workers, 'max_bins': meta['bin'], 'lr': lr, 'reg_l2': 1.0,
-         'early_stop': 0, 'one_side': True, 'verbose': False, 'hist_cache': 48,
-         'min_samples': 4}
+    p = {
+        'max_depth': depth,
+        'max_leaves': int(0.75 * 2**depth),
+        'topk': 0,
+        'loss': b"mse",
+        'gamma': 1e-6,
+        'num_threads': args.workers,
+        'max_bins': meta['bin'],
+        'lr': lr,
+        'reg_l2': 1.0,
+        'early_stop': 0,
+        'one_side': True,
+        'verbose': False,
+        'hist_cache': 48,
+        'min_samples': 4,
+    }
 
     x_train, y_train, x_test, y_test = data
     m = GBDTSingle(LIB, out_dim=1, params=p)
@@ -86,11 +131,12 @@ def regression_single(data, meta, depth, lr):
 
 
 if __name__ == '__main__':
-    p = {'mnist': [8, 0.1],
-         'Caltech101': [9, 0.1],
-         'mnist_reg': [7, 0.1],
-         'nus-wide': [8, 0.1],
-         }
+    p = {
+        'mnist': [8, 0.1],
+        'Caltech101': [9, 0.1],
+        'mnist_reg': [7, 0.1],
+        'nus-wide': [8, 0.1],
+    }
 
     name = args.data
     m = DataLoader()
@@ -118,10 +164,3 @@ if __name__ == '__main__':
 
     print("GBDT-SO on {}:\t{:.3f}".format(name, out_single))
     print("GBDT-MO on {}:\t{:.3f}".format(name, out_multi))
-
-
-
-
-
-
-
